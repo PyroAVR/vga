@@ -94,9 +94,6 @@ uint8_t hex2nib(char n);
 /* Port E */
 #define PTE30_MUX_DAC0_OUT (0u << PORT_PCR_MUX_SHIFT)
 #define SET_PTE30_DAC0_OUT (PORT_PCR_ISF_MASK | PTE30_MUX_DAC0_OUT)
-#define PTE31_MUX_TPM0_CH4_OUT (3u << PORT_PCR_MUX_SHIFT)
-#define SET_PTE31_TPM0_CH4_OUT (PORT_PCR_ISF_MASK | \
-                                PTE31_MUX_TPM0_CH4_OUT)
 /*-------------------------------------------------------*/
 /* SIM_SOPT2                                             */
 /*   -->31-28:(reserved):read-only:0                     */
@@ -139,7 +136,7 @@ uint8_t hex2nib(char n);
 /* 31-16:(reserved):read-only:0                                           */
 /* 15- 0:MOD=modulo value (recommended to clear TPMx_CNT before changing) */
 /* Period = 3 MHz / 50 Hz */
-#define TPM_MOD_PWM_PERIOD_20ms (60000u)
+#define TPM_MOD_PWM_PERIOD_20ms  (60000u)
 /*------------------------------------------------------------------*/
 /* TPMx_CnSC:  Channel n Status and Control                         */
 /* 0-->31-8:(reserved):read-only:0                                  */
@@ -168,23 +165,59 @@ uint8_t hex2nib(char n);
 /*  01--> 4-3:CMOD=clock mode selection (count each TPMx clock) */
 /* 100--> 2-0:PS=prescale factor selection                      */
 /*    -->        can be written only when counter is disabled   */
-#define TPM_SC_CMOD_CLK (1u)
-#define TPM_SC_PS_DIV16 (0x4u)
+
 #define TPM_SC_CLK_DIV16 ((TPM_SC_CMOD_CLK << TPM_SC_CMOD_SHIFT) | \
                           TPM_SC_PS_DIV16)
 #define TPM_CnV_PWM_DUTY_2ms (6000u)
 #define TPM_CnV_PWM_DUTY_1ms (3000u)
-#define dac0_steps           (4096U)
 /*- -----*/
-/* Servo */
-#define servo_positions  (5)
 
-UInt16 *dac0_table = &dac0_table_0;
-UInt16 *pwm_duty_table = &pwm_duty_table_0;
+/* VGA */
+//set TPMx to reset counter on TPM1 ovf
+#define TPM_CONF_TRG_TPM1 (0x09040000u)
+
+//Prescaler values for sync signals
+#define TPM_SC_PS_VSYNC  (0x4u)
+#define TPM_SC_PS_HSYNC  (0x0u)
+
+//Wave periods (# of CCR clocks) for sync signals
+#define TPM_MOD_PWM_PERIOD_VSYNC (50049u)
+#define TPM_MOD_PWM_PERIOD_HSYNC (1525u)
+
+//Duty time (# of CCR clocks) for sync signals
+#define TPM_CNT_PWM_PERIOD_VSYNC (954u)
+#define TPM_CNT_PWM_PERIOD_HSYNC (183u)
+
+//Status & control (prescaling
+#define TPM_SC_CMOD_CLK (1u)
+#define TPM_SC_PS_DIV16 (0x4u)
+#define TPM_SC_HSYNC    (~TPM_SC_CPWMS_MASK | TPM_SC_CHIE_MASK | \
+                         (01 << TPM_SC_CMOD_SHIFT) | TPM_SC_PS_HSYNC
+
+#define TPM_SC_VSYNC    (~TPM_SC_CPWMS_MASK | ~TPM_SC_CHIE_MASK | \
+                         (01 << TPM_SC_CMOD_SHIFT) | TPM_SC_PS_VSYNC
+
+
+
+#define PTE31_MUX_TPM0_CH4_OUT (3u << PORT_PCR_MUX_SHIFT)
+#define SET_PTE31_TPM0_CH4_OUT (PORT_PCR_ISF_MASK | \
+                                PTE31_MUX_TPM0_CH4_OUT)
+
+#define PTA13_MUX_TPM1_CH0_OUT (3u << PORT_PCR_MUX_SHIFT)
+#define SET_PTA13_TPM1_CH0_OUT (PORT_PCR_ISF_MASK | \
+                                PTA13_MUX_TPM1_CH0_OUT)
+
+
+#define TPM_CnSC_VSYNC (TPM_CnSC_MSnB_MASK | ~TPM_CnSC_MSnA_MASK \
+                        TPM_CnSC_ELSnB_MASK | TPM_CnSC_ELSnA_MASK | \
+                        TPM_CnSC_CHIE_MASK
+#define TPM_CnSC_HSYNC (TPM_CnSC_MSnB_MASK | ~TPM_CnSC_MSnA_MASK \
+                        TPM_CnSC_ELSnB_MASK | TPM_CnSC_ELSnA_MASK | \
+                        ~TPM_CnSC_CHIE_MASK
+
 
 /* C function declarations */
 
 //parameterize these
 void init_dac0(void);
 void init_tpm0(void);
-uint32_t atoi(char*);
