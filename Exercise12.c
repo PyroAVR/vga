@@ -53,11 +53,20 @@ void init_tpm0()    {
     //Configure TPM0_CH4 (HSync)
     TPM0->CONF              = TPM_CONF_TRG_TPM1;
     TPM0->CNT               = TPM_CNT_INIT;
-    TPM0->MOD               = TPM_MOD_PWM_PERIOD_20ms;
+    TPM0->MOD               = TPM_MOD_PERIOD_HSYNC;
 
-    TPM0->CONTROLS[4].CnSC  = TPM_CnSC_PWMH;
-    TPM0->CONTROLS[4].CnV   = TPM_CnV_PWM_DUTY_2ms;
-    TPM0->SC                = TPM_SC_CLK_DIV16;
+    TPM0->CONTROLS[4].CnSC  = TPM_CnSC_HSYNC;
+    TPM0->CONTROLS[4].CnV   = TPM_CNT_PWM_PERIOD_HSYNC;
+    TPM0->SC                = TPM_SC_HSYNC;
+
+    //Configure TPM1_CH0
+    TPM1->CONF              = TPM_CONF_TRG_TPM1;
+    TPM1->CNT               = TPM_CNT_INIT;
+    TPM1->MOD               = TPM_MOD_PERIOD_HSYNC;
+
+    TPM1->CONTROLS[0].CnSC  = TPM_CnSC_VSYNC;
+    TPM1->CONTROLS[0].CnV   = TPM_CNT_PWM_PERIOD_VSYNC;
+    TPM1->SC                = TPM_SC_VSYNC;
 
 
 }
