@@ -1,4 +1,5 @@
 #include "Constants.h"
+#include "Startup.h"
 /**
  * Main Program.
  * Initializes the system for VGA video output.
@@ -7,7 +8,7 @@
 
 int main (void) {
     __asm("CPSID   I");
-    init_tpm0();
+    init_sync_signals();
     __asm("CPSIE   I");
 
 loop:
