@@ -165,10 +165,10 @@
                                 PTA13_MUX_TPM1_CH0_OUT)
 
 
-#define TPM_CnSC_VSYNC (TPM_CnSC_MSB_MASK | (~TPM_CnSC_MSA_MASK) \
+#define TPM_CnSC_VSYNC (TPM_CnSC_MSB_MASK | (~TPM_CnSC_MSA_MASK) |  \
                         TPM_CnSC_ELSB_MASK | TPM_CnSC_ELSA_MASK | \
                         TPM_CnSC_CHIE_MASK)
-#define TPM_CnSC_HSYNC (TPM_CnSC_MSB_MASK | (~TPM_CnSC_MSA_MASK) \
+#define TPM_CnSC_HSYNC (TPM_CnSC_MSB_MASK | (~TPM_CnSC_MSA_MASK) |\
                         TPM_CnSC_ELSB_MASK | TPM_CnSC_ELSA_MASK | \
                         (~TPM_CnSC_CHIE_MASK))
 
