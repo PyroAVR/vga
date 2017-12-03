@@ -148,11 +148,13 @@
 #define TPM_SC_CMOD_CLK (1u)
 #define TPM_SC_PS_DIV16 (0x4u)
 
-#define TPM_SC_HSYNC    (~TPM_SC_CPWMS_MASK | TPM_SC_TOIE_MASK | \
-                         (01 << TPM_SC_CMOD_SHIFT) | TPM_SC_PS_HSYNC)
+#define TPM_SC_HSYNC    ((~TPM_SC_DMA_MASK) | \
+                        (~TPM_SC_CPWMS_MASK) | (TPM_SC_TOIE_MASK) | \
+                        (01 << TPM_SC_CMOD_SHIFT) | (TPM_SC_PS_HSYNC))
 
-#define TPM_SC_VSYNC    (~TPM_SC_CPWMS_MASK | ~TPM_SC_TOIE_MASK | \
-                         (01 << TPM_SC_CMOD_SHIFT) | TPM_SC_PS_VSYNC)
+#define TPM_SC_VSYNC    ((~TPM_SC_DMA_MASK) | \
+                        (~TPM_SC_CPWMS_MASK) | (~TPM_SC_TOIE_MASK) | \
+                        (01 << TPM_SC_CMOD_SHIFT) | (TPM_SC_PS_VSYNC))
 
 
 
@@ -165,11 +167,13 @@
                                 PTA13_MUX_TPM1_CH0_OUT)
 
 
-#define TPM_CnSC_VSYNC (TPM_CnSC_MSB_MASK | (~TPM_CnSC_MSA_MASK) |  \
-                        TPM_CnSC_ELSB_MASK | TPM_CnSC_ELSA_MASK | \
+#define TPM_CnSC_VSYNC ((~TPM_CnSC_DMA_MASK) | TPM_CnSC_MSB_MASK | \
+                        (~TPM_CnSC_MSA_MASK) |  \
+                        (~TPM_CnSC_ELSB_MASK) | TPM_CnSC_ELSA_MASK | \
                         TPM_CnSC_CHIE_MASK)
-#define TPM_CnSC_HSYNC (TPM_CnSC_MSB_MASK | (~TPM_CnSC_MSA_MASK) |\
-                        TPM_CnSC_ELSB_MASK | TPM_CnSC_ELSA_MASK | \
+#define TPM_CnSC_HSYNC ((~TPM_CnSC_DMA_MASK) | TPM_CnSC_MSB_MASK | \
+                        (~TPM_CnSC_MSA_MASK) |\
+                        (~TPM_CnSC_ELSB_MASK) | TPM_CnSC_ELSA_MASK | \
                         (~TPM_CnSC_CHIE_MASK))
 
 #endif
