@@ -6,4 +6,5 @@
 //parameterize these
 void init_dac0(void);
 void init_sync_signals(void);
+void init_gpio(void);
 #endif
