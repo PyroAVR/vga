@@ -1,51 +1,5 @@
-/*********************************************************************/
-/* Lab Exercise Eleven                                               */
-/* Adjusts a servo to one of five positions [1, 5] using  mixed C    */
-/* and assembly language.  Prompts user to enter a number from 1 to  */
-/* 5, generates a voltage in the range (0, 3.3] V proportional to    */
-/* the user's number, converts the voltage to a 10-bit number, and   */
-/* set's the servo position [1, 5] based on the magnitude of the 10- */
-/* bit digital value.                                                */
-/* Name:  R. W. Melton                                               */
-/* Date:  November 3, 2017                                           */
-/* Class:  CMPE 250                                                  */
-/* Section:  All sections                                            */
-/*********************************************************************/
 #include "MKL46Z4.h"
 #include <stdint.h>
-typedef int Int32;
-typedef short int Int16;
-typedef char Int8;
-typedef unsigned int UInt32;
-typedef unsigned short int UInt16;
-typedef unsigned char UInt8;
-
-/* assembly language ROM table entries */
-extern UInt16 dac0_table_0;
-extern UInt16 pwm_duty_table_0;
-/*
-typedef struct  {
-   uint32_t *in_ptr;
-   uint32_t *out_ptr;
-   uint32_t *buf_start;
-   uint32_t *buf_past;
-   uint8_t   size;
-   uint8_t   num_enqd; 
-} queue_s;
-*/
-/* assembly language subroutines */
-//void InitQueue(uint8_t *buf, queue_s *q, uint8_t buf_size); 
-//void Enqueue(char byte, queue_s *q);
-//char Dequeue(queue_s *q);
-void init_rxtx(void);
-void init_uart0(void);
-char getchar(void);
-void putchar(char Character);
-void GetStringSB(char String[], int StringBufferCapacity);
-void PutStringSB(char String[], int StringBufferCapacity);
-void PutNumHex(UInt32);
-void PutNumUB(UInt8);
-uint8_t hex2nib(char n);
 
 /* C System Definitions */
 #define FALSE      (0)
@@ -220,4 +174,4 @@ uint8_t hex2nib(char n);
 
 //parameterize these
 void init_dac0(void);
-void init_tpm0(void);
+void init_sync_signals(void);
