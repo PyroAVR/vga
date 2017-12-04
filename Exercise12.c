@@ -1,4 +1,5 @@
 #include "Constants.h"
+#include "Exercise12.h"
 #include "Startup.h"
 /**
  * Main Program.
@@ -11,13 +12,13 @@ int main (void) {
     init_sync_signals();
 		init_gpio();
     __asm("CPSIE   I");
-
-		//16 to 23
-		FPTE->PDOR = 0x00FF0000;
+	//16 to 23
+	FPTE->PDOR = 0x00FF0000;
 	
-	
+    
 loop:
-
+    FPTE->PDOR ^= 0x00FF0000;
+    //wait();
     goto loop;
 }
 
