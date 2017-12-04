@@ -44,8 +44,8 @@ void init_sync_signals()    {
     TPM1->CNT               = TPM_CNT_INIT;
     TPM1->MOD               = TPM_MOD_PWM_PERIOD_VSYNC;
 
-    TPM1->CONTROLS[0].CnSC  = TPM_CnSC_VSYNC;
-    TPM1->CONTROLS[0].CnV   = TPM_CNT_PWM_PERIOD_VSYNC;
+    TPM1->CONTROLS[1].CnSC  = TPM_CnSC_VSYNC; 
+    TPM1->CONTROLS[1].CnV   = TPM_CNT_PWM_PERIOD_VSYNC;
     TPM1->SC                = TPM_SC_VSYNC;
 
 
