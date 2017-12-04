@@ -20,6 +20,7 @@ MIXED_ASM_C SETL  {TRUE}
 ;Include files
             GET  MKL46Z4.s     ;Included by start.s
             OPT  1   ;Turn on listing
+            export wait
 ;****************************************************************
 ;EQUates
 TPM_CnV_PWM_DUTY_2ms    equ 6000
@@ -38,6 +39,15 @@ servo_positions\
 ;Only subroutines and ISRs in this assembly source
             AREA    MyCode,CODE,READONLY
 ;>>>>> begin subroutine code <<<<<
+wait        proc {r0-r14}, {}
+            push {r0, lr}
+            movs r0, #00
+waitloop    cmp r0, #0
+            beq waitdone
+            subs r0, r0, #1
+            b    waitloop
+waitdone    pop  {r0, pc}
+            endp
 ;>>>>>   end subroutine code <<<<<
             ALIGN
 ;**********************************************************************

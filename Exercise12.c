@@ -1,4 +1,5 @@
 #include "Constants.h"
+#include "Exercise12.h"
 #include "Startup.h"
 /**
  * Main Program.
@@ -12,12 +13,14 @@ int main (void) {
 		init_gpio();
 		
     __asm("CPSIE   I");
-
 		//16 to 23
 		//FPTE->PDOR = 0x00450000;
+
 	
+    
 loop:
 		blanking_poll();
+
     goto loop;
 }
 
