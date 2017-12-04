@@ -70,6 +70,18 @@ void init_gpio(){
 		
 		// Data Direction (16-23)
 		FPTE->PDDR							= COLOR_PORTE_MASK;
+	
+		// Initialize outputs to zero
+		FPTE->PDOR = 0;
 }
 
+/**
+*	Polls for the blanking period
+*/
+void blanking_poll(){
+		while(TPM0->CNT < 1220){}
+		FPTE->PDOR = 0x00FF0000;
+		while(TPM0->CNT < 1525){}
+		FPTE->PDOR = 0x00000000;
+}
 
