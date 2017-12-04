@@ -48,6 +48,30 @@ waitloop    cmp r0, #0
             b    waitloop
 waitdone    pop  {r0, pc}
             endp
+				
+blank_poll	proc 	{r0-r14}, {}
+			push 	{r0-r3, lr}
+			movs	r2, #0xFF
+			lsls	r2, r2, #16
+			
+			ldr		r0, =TPM0_BASE
+notblank	ldr		r1, [r0, #TPM_CNT_OFFSET]
+			ldr		r3, =1220
+			cmp		r1, r3
+			blo		notblank
+			ldr		r0, =FGPIOE_PDOR
+			ldr		r1, [r0, #0]
+			orrs	r1, r1, r2
+			str		r1, [r0, #0]
+blank		ldr		r1, [r0, #TPM_CNT_OFFSET]
+			cmp 	r1, #0
+			bhi		blank
+			ldr		r0, =FGPIOE_PDOR
+			ldr		r1, [r0, #0]
+			bics	r1, r1, r2
+			str		r1, [r0, #0]
+			pop		{r0-r3, pc}
+			endp
 ;>>>>>   end subroutine code <<<<<
             ALIGN
 ;**********************************************************************
