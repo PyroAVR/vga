@@ -51,11 +51,41 @@ void init_sync_signals()    {
 
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /**
 *	Initialize gpio ports for color output
 */
 void init_gpio(){
+		// Enable clock for Port E
+		SIM->SCGC5 						 |= SIM_SCGC5_PORTE_MASK;
+	
+		// Configure Pin Connections (16-23)
+		PORTE->PCR[16]			    = SET_PTE_16TO23_GPIO;
+		PORTE->PCR[17]			    = SET_PTE_16TO23_GPIO;
+		PORTE->PCR[18]			    = SET_PTE_16TO23_GPIO;
+		PORTE->PCR[19]			    = SET_PTE_16TO23_GPIO;
+		PORTE->PCR[20]			    = SET_PTE_16TO23_GPIO;
+		PORTE->PCR[21]			    = SET_PTE_16TO23_GPIO;
+		PORTE->PCR[22]			    = SET_PTE_16TO23_GPIO;
+		PORTE->PCR[23]			    = SET_PTE_16TO23_GPIO;
 		
+		// Data Direction (16-23)
+		FPTE->PDDR							= COLOR_PORTE_MASK;
 }
 
 

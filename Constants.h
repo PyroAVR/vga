@@ -176,4 +176,26 @@
                         (0 << TPM_CnSC_ELSB_SHIFT) | TPM_CnSC_ELSA_MASK | \
                         (0 << TPM_CnSC_CHIE_SHIFT))
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Definitions for PORTE
+#define PTE_16TO23_MUX_GPIO (1 << PORT_PCR_MUX_SHIFT)
+#define SET_PTE_16TO23_GPIO (PORT_PCR_ISF_MASK | PTE_16TO23_MUX_GPIO)
+
+// Output configuration mask
+#define COLOR_PORTE_MASK 		(0x00FF0000)
+
 #endif
