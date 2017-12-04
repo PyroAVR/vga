@@ -51,22 +51,6 @@ void init_sync_signals()    {
 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /**
 *	Initialize gpio ports for color output
 */
