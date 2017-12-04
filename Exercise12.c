@@ -19,8 +19,8 @@ int main (void) {
 	
     
 loop:
-		blanking_poll();
-
+		//bp_poll();
+		fp_poll();
     goto loop;
 }
 

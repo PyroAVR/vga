@@ -75,13 +75,4 @@ void init_gpio(){
 		FPTE->PDOR = 0;
 }
 
-/**
-*	Polls for the blanking period
-*/
-void blanking_poll(){
-		while(TPM0->CNT < 1220){}
-		FPTE->PDOR = 0x00FF0000;
-		while(TPM0->CNT < 1525){}
-		FPTE->PDOR = 0x00000000;
-}
 
