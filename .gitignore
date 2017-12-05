@@ -1,1 +1,4 @@
 *.uv*
+Objects/*
+Listings/*
+tools/*
