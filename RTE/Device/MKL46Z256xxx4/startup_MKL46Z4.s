@@ -46,6 +46,7 @@ __heap_limit
                 EXPORT  __Vectors_End
                 EXPORT  __Vectors_Size
                 import  pit_isr
+                import  hblank_isr
 
 __Vectors       DCD     __initial_sp  ; Top of Stack
                 DCD     Reset_Handler  ; Reset Handler
@@ -84,7 +85,7 @@ __Vectors       DCD     __initial_sp  ; Top of Stack
                 DCD     CMP0_IRQHandler  ; CMP0 interrupt
                 DCD     TPM0_IRQHandler  ; TPM0 fault, overflow and channels interrupt
                 DCD     TPM1_IRQHandler  ; TPM1 fault, overflow and channels interrupt
-                DCD     TPM2_IRQHandler  ; TPM2 fault, overflow and channels interrupt
+                DCD     hblank_isr  ; TPM2 fault, overflow and channels interrupt
                 DCD     RTC_IRQHandler  ; RTC interrupt
                 DCD     RTC_Seconds_IRQHandler  ; RTC seconds interrupt
                 DCD     pit_isr             ; PIT timer interrupt

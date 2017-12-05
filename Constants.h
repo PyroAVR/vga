@@ -131,6 +131,7 @@
 /* VGA */
 //set TPMx to reset counter on TPM1 ovf
 #define TPM_CONF_TRG_TPM1 (0x09040000u)
+#define TPM_CONF_TRG_TPM0 (0x04040000u)
 
 //Prescaler values for sync signals
 #define TPM_SC_PS_VSYNC  (0x4u)
@@ -141,8 +142,9 @@
 #define TPM_MOD_PWM_PERIOD_HSYNC (1525u)
 
 //Duty time (# of CCR clocks) for sync signals
-#define TPM_CNT_PWM_PERIOD_VSYNC (191u)
-#define TPM_CNT_PWM_PERIOD_HSYNC (183u)
+#define TPM_CNT_PWM_PERIOD_VSYNC  (191u)
+#define TPM_CNT_PWM_PERIOD_HSYNC  (183u)
+#define TPM_CNT_PWM_PERIOD_HBLANK (1525u) //FIXME
 
 //Status & control (prescaling
 #define TPM_SC_CMOD_CLK (1u)
@@ -156,6 +158,9 @@
                          (0 << TPM_SC_CPWMS_SHIFT) | (0 << TPM_SC_TOIE_SHIFT) | \
                         (01 << TPM_SC_CMOD_SHIFT) | (TPM_SC_PS_VSYNC))
 
+#define TPM_SC_HBLANK   ((0 << TPM_SC_DMA_SHIFT) | \
+                        (0 << TPM_SC_CPWMS_SHIFT) | (1 << TPM_SC_TOIE_SHIFT) | \
+                        (01 << TPM_SC_CMOD_SHIFT) | (TPM_SC_PS_HSYNC))
 
 
 #define PTE31_MUX_TPM0_CH4_OUT (3u << PORT_PCR_MUX_SHIFT)
@@ -176,6 +181,11 @@
                         (0 << TPM_CnSC_ELSB_SHIFT) | TPM_CnSC_ELSA_MASK | \
                         (0 << TPM_CnSC_CHIE_SHIFT))
 
+#define TPM_CnSC_HBLANK ((0 << TPM_CnSC_DMA_SHIFT) | TPM_CnSC_MSB_MASK | \
+                        (0 << TPM_CnSC_MSA_SHIFT) |\
+                        (0 << TPM_CnSC_ELSB_SHIFT) | TPM_CnSC_ELSA_MASK | \
+                        (1 << TPM_CnSC_CHIE_SHIFT))
+
 // Definitions for PORTE
 #define PTE_16TO23_MUX_GPIO (1 << PORT_PCR_MUX_SHIFT)
 #define SET_PTE_16TO23_GPIO (PORT_PCR_ISF_MASK | PTE_16TO23_MUX_GPIO)
@@ -186,5 +196,6 @@
 //PIT values
 //PIT get BUS CLOCK @ 24 MHz
 #define PIT_LDVAL_HBLANK 763
+
 
 #endif

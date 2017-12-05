@@ -9,4 +9,5 @@
 void init_sync_signals(void);
 void init_gpio(void);
 void init_pit_hblank(void);
+void init_tpm2_hblank(void);
 #endif

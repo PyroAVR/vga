@@ -1,0 +1,282 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ;-------------------------------------------------------
+                       --------
+    2 00000000         ; ASCII
+    3 00000000 0000000A 
+                       LF      EQU              0x0A
+    4 00000000 0000000D 
+                       CR      EQU              0x0D
+    5 00000000 0000007F 
+                       DEL     EQU              0x7F
+    6 00000000 0000001B 
+                       ESC     EQU              0x1B
+    7 00000000         ;-------------------------------------------------------
+                       --------
+    8 00000000         ;-------------------------------------------------------
+                       --------
+    9 00000000         ;NVIC_ICER
+   10 00000000         ;31-00:CLRENA=masks for HW IRQ sources;
+   11 00000000         ;             read:   0 = unmasked;   1 = masked
+   12 00000000         ;             write:  0 = no effect;  1 = mask
+   13 00000000         ;12:UART0 IRQ mask
+   14 00000000         NVIC_ICER_UART0_MASK
+                               EQU              UART0_IRQ_MASK
+   15 00000000         ;-------------------------------------------------------
+                       --------
+   16 00000000         ;NVIC_ICPR
+   17 00000000         ;31-00:CLRPEND=pending status for HW IRQ sources;
+   18 00000000         ;             read:   0 = not pending;  1 = pending
+   19 00000000         ;             write:  0 = no effect;
+   20 00000000         ;                     1 = change status to not pending
+   21 00000000         ;12:UART0 IRQ pending status
+   22 00000000         NVIC_ICPR_UART0_MASK
+                               EQU              UART0_IRQ_MASK
+   23 00000000         ;-------------------------------------------------------
+                       --------
+   24 00000000         ;NVIC_IPR0-NVIC_IPR7
+   25 00000000         ;2-bit priority:  00 = highest; 11 = lowest
+   26 00000000 00000003 
+                       UART0_IRQ_PRIORITY
+                               EQU              3
+   27 00000000         NVIC_IPR_UART0_MASK
+                               EQU              (3 << UART0_PRI_POS)
+   28 00000000         NVIC_IPR_UART0_PRI_3
+                               EQU              (UART0_IRQ_PRIORITY << UART0_PR
+I_POS)
+   29 00000000         ;-------------------------------------------------------
+                       --------
+   30 00000000         ;NVIC_ISER
+   31 00000000         ;31-00:SETENA=masks for HW IRQ sources;
+   32 00000000         ;             read:   0 = masked;     1 = unmasked
+   33 00000000         ;             write:  0 = no effect;  1 = unmask
+   34 00000000         ;12:UART0 IRQ mask
+   35 00000000         NVIC_ISER_UART0_MASK
+                               EQU              UART0_IRQ_MASK
+   36 00000000         ;-------------------------------------------------------
+                       --------
+   37 00000000         ;PORTx_PCRn (Port x pin control register n [for pin n])
+   38 00000000         ;___->10-08:Pin mux control (select 0 to 8)
+   39 00000000         ;Use provided PORT_PCR_MUX_SELECT_2_MASK
+   40 00000000         ;-------------------------------------------------------
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+                       --------
+   41 00000000         ;Port A
+   43 00000000         PORT_PCR_SET_PTA1_UART0_RX
+                               EQU              (PORT_PCR_ISF_MASK :OR:       
+                             PORT_PCR_MUX_SELECT_2_MASK)
+   45 00000000         PORT_PCR_SET_PTA2_UART0_TX
+                               EQU              (PORT_PCR_ISF_MASK :OR:       
+                             PORT_PCR_MUX_SELECT_2_MASK)
+   46 00000000         ;-------------------------------------------------------
+                       --------
+   47 00000000         ;SIM_SCGC4
+   48 00000000         ;1->10:UART0 clock gate control (enabled)
+   49 00000000         ;Use provided SIM_SCGC4_UART0_MASK
+   50 00000000         ;-------------------------------------------------------
+                       --------
+   51 00000000         ;SIM_SCGC5
+   52 00000000         ;1->09:Port A clock gate control (enabled)
+   53 00000000         ;Use provided SIM_SCGC5_PORTA_MASK
+   54 00000000         ;-------------------------------------------------------
+                       --------
+   55 00000000         ;SIM_SOPT2
+   56 00000000         ;01=27-26:UART0SRC=UART0 clock source select
+   57 00000000         ;         (PLLFLLSEL determines MCGFLLCLK' or MCGPLLCLK/
+                       2)
+   58 00000000         ; 1=   16:PLLFLLSEL=PLL/FLL clock select (MCGPLLCLK/2)
+   60 00000000         SIM_SOPT2_UART0SRC_MCGPLLCLK
+                               EQU              (1 << SIM_SOPT2_UART0SRC_SHIFT)
+   62 00000000         SIM_SOPT2_UART0_MCGPLLCLK_DIV2
+                               EQU              (SIM_SOPT2_UART0SRC_MCGPLLCLK :
+OR: SIM_SOPT2_PLLFLLSEL_MASK)
+   63 00000000         ;-------------------------------------------------------
+                       --------
+   64 00000000         ;SIM_SOPT5
+   65 00000000         ; 0->   16:UART0 open drain enable (disabled)
+   66 00000000         ; 0->   02:UART0 receive data select (UART0_RX)
+   67 00000000         ;00->01-00:UART0 transmit data select source (UART0_TX)
+   71 00000000         SIM_SOPT5_UART0_EXTERN_MASK_CLEAR
+                               EQU              (SIM_SOPT5_UART0ODE_MASK :OR:  
+                                SIM_SOPT5_UART0RXSRC_MASK :OR:               
+                   SIM_SOPT5_UART0TXSRC_MASK)
+   72 00000000         ;-------------------------------------------------------
+                       --------
+   73 00000000         ;UART0_BDH
+   74 00000000         ;    0->  7:LIN break detect IE (disabled)
+   75 00000000         ;    0->  6:RxD input active edge IE (disabled)
+   76 00000000         ;    0->  5:Stop bit number select (1)
+   77 00000000         ;00001->4-0:SBR[12:0] (UART0CLK / [9600 * (OSR + 1)]) 
+   78 00000000         ;UART0CLK is MCGPLLCLK/2
+   79 00000000         ;MCGPLLCLK is 96 MHz
+   80 00000000         ;MCGPLLCLK/2 is 48 MHz
+   81 00000000         ;SBR = 48 MHz / (9600 * 16) = 312.5 --> 312 = 0x138
+   82 00000000 00000001 
+                       UART0_BDH_9600
+                               EQU              0x01
+   83 00000000         ;-------------------------------------------------------
+                       --------
+   84 00000000         ;UART0_BDL
+   85 00000000         ;26->7-0:SBR[7:0] (UART0CLK / [9600 * (OSR + 1)])
+   86 00000000         ;UART0CLK is MCGPLLCLK/2
+
+
+
+ARM Macro Assembler    Page 3 
+
+
+   87 00000000         ;MCGPLLCLK is 96 MHz
+   88 00000000         ;MCGPLLCLK/2 is 48 MHz
+   89 00000000         ;SBR = 48 MHz / (9600 * 16) = 312.5 --> 312 = 0x138
+   90 00000000 00000038 
+                       UART0_BDL_9600
+                               EQU              0x38
+   91 00000000         ;-------------------------------------------------------
+                       --------
+   92 00000000         ;UART0_C1
+   93 00000000         ;0-->7:LOOPS=loops select (normal)
+   94 00000000         ;0-->6:DOZEEN=doze enable (disabled)
+   95 00000000         ;0-->5:RSRC=receiver source select (internal--no effect 
+                       LOOPS=0)
+   96 00000000         ;0-->4:M=9- or 8-bit mode select 
+   97 00000000         ;        (1 start, 8 data [lsb first], 1 stop)
+   98 00000000         ;0-->3:WAKE=receiver wakeup method select (idle)
+   99 00000000         ;0-->2:IDLE=idle line type select (idle begins after sta
+                       rt bit)
+  100 00000000         ;0-->1:PE=parity enable (disabled)
+  101 00000000         ;0-->0:PT=parity type (even parity--no effect PE=0)
+  102 00000000 00000000 
+                       UART0_C1_8N1
+                               EQU              0x00
+  103 00000000         ;-------------------------------------------------------
+                       --------
+  104 00000000         ;UART0_C2
+  105 00000000         ;0-->7:TIE=transmit IE for TDRE (disabled)
+  106 00000000         ;0-->6:TCIE=transmission complete IE for TC (disabled)
+  107 00000000         ;0-->5:RIE=receiver IE for RDRF (disabled)
+  108 00000000         ;0-->4:ILIE=idle line IE for IDLE (disabled)
+  109 00000000         ;1-->3:TE=transmitter enable (enabled)
+  110 00000000         ;1-->2:RE=receiver enable (enabled)
+  111 00000000         ;0-->1:RWU=receiver wakeup control (normal)
+  112 00000000         ;0-->0:SBK=send break (disabled, normal)
+  113 00000000         UART0_C2_T_R
+                               EQU              (UART0_C2_TE_MASK :OR: UART0_C2
+_RE_MASK)
+  114 00000000         UART0_C2_T_RI
+                               EQU              (UART0_C2_RIE_MASK :OR: UART0_C
+2_T_R)
+  115 00000000         UART0_C2_TI_RI
+                               EQU              (UART0_C2_TIE_MASK :OR: UART0_C
+2_T_RI)
+  116 00000000         ;-------------------------------------------------------
+                       --------
+  117 00000000         ;UART0_C3
+  118 00000000         ;0-->7:R8T9=9th data bit for receiver (not used M=0)
+  119 00000000         ;           10th data bit for transmitter (not used M10=
+                       0)
+  120 00000000         ;0-->6:R9T8=9th data bit for transmitter (not used M=0)
+  121 00000000         ;           10th data bit for receiver (not used M10=0)
+  122 00000000         ;0-->5:TXDIR=UART_TX pin direction in single-wire mode
+  123 00000000         ;            (no effect LOOPS=0)
+  124 00000000         ;0-->4:TXINV=transmit data inversion (not inverted)
+  125 00000000         ;0-->3:ORIE=overrun IE for OR (disabled)
+  126 00000000         ;0-->2:NEIE=noise error IE for NF (disabled)
+  127 00000000         ;0-->1:FEIE=framing error IE for FE (disabled)
+  128 00000000         ;0-->0:PEIE=parity error IE for PF (disabled)
+  129 00000000 00000000 
+
+
+
+ARM Macro Assembler    Page 4 
+
+
+                       UART0_C3_NO_TXINV
+                               EQU              0x00
+  130 00000000         ;-------------------------------------------------------
+                       --------
+  131 00000000         ;UART0_C4
+  132 00000000         ;    0-->  7:MAEN1=match address mode enable 1 (disabled
+                       )
+  133 00000000         ;    0-->  6:MAEN2=match address mode enable 2 (disabled
+                       )
+  134 00000000         ;    0-->  5:M10=10-bit mode select (not selected)
+  135 00000000         ;01111-->4-0:OSR=over sampling ratio (16)
+  136 00000000         ;               = 1 + OSR for 3 <= OSR <= 31
+  137 00000000         ;               = 16 for 0 <= OSR <= 2 (invalid values)
+  138 00000000 0000000F 
+                       UART0_C4_OSR_16
+                               EQU              0x0F
+  139 00000000 0000000F 
+                       UART0_C4_NO_MATCH_OSR_16
+                               EQU              UART0_C4_OSR_16
+  140 00000000         ;-------------------------------------------------------
+                       --------
+  141 00000000         ;UART0_C5
+  142 00000000         ;  0-->  7:TDMAE=transmitter DMA enable (disabled)
+  143 00000000         ;  0-->  6:Reserved; read-only; always 0
+  144 00000000         ;  0-->  5:RDMAE=receiver full DMA enable (disabled)
+  145 00000000         ;000-->4-2:Reserved; read-only; always 0
+  146 00000000         ;  0-->  1:BOTHEDGE=both edge sampling (rising edge only
+                       )
+  147 00000000         ;  0-->  0:RESYNCDIS=resynchronization disable (enabled)
+                       
+  148 00000000 00000000 
+                       UART0_C5_NO_DMA_SSR_SYNC
+                               EQU              0x00
+  149 00000000         ;-------------------------------------------------------
+                       --------
+  150 00000000         ;UART0_S1
+  151 00000000         ;0-->7:TDRE=transmit data register empty flag; read-only
+                       
+  152 00000000         ;0-->6:TC=transmission complete flag; read-only
+  153 00000000         ;0-->5:RDRF=receive data register full flag; read-only
+  154 00000000         ;1-->4:IDLE=idle line flag; write 1 to clear (clear)
+  155 00000000         ;1-->3:OR=receiver overrun flag; write 1 to clear (clear
+                       )
+  156 00000000         ;1-->2:NF=noise flag; write 1 to clear (clear)
+  157 00000000         ;1-->1:FE=framing error flag; write 1 to clear (clear)
+  158 00000000         ;1-->0:PF=parity error flag; write 1 to clear (clear)
+  159 00000000 0000001F 
+                       UART0_S1_CLEAR_FLAGS
+                               EQU              0x1F
+  160 00000000         ;-------------------------------------------------------
+                       --------
+  161 00000000         ;UART0_S2
+  162 00000000         ;1-->7:LBKDIF=LIN break detect interrupt flag (clear)
+  163 00000000         ;             write 1 to clear
+  164 00000000         ;1-->6:RXEDGIF=RxD pin active edge interrupt flag (clear
+                       )
+  165 00000000         ;              write 1 to clear
+  166 00000000         ;0-->5:(reserved); read-only; always 0
+  167 00000000         ;0-->4:RXINV=receive data inversion (disabled)
+
+
+
+ARM Macro Assembler    Page 5 
+
+
+  168 00000000         ;0-->3:RWUID=receive wake-up idle detect
+  169 00000000         ;0-->2:BRK13=break character generation length (10)
+  170 00000000         ;0-->1:LBKDE=LIN break detect enable (disabled)
+  171 00000000         ;0-->0:RAF=receiver active flag; read-only
+  172 00000000 000000C0 
+                       UART0_S2_NO_RXINV_BRK10_NO_LBKDETECT_CLEAR_FLAGS
+                               EQU              0xC0
+  173 00000000         ;-------------------------------------------------------
+                       --------
+  174 00000000                 END
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M0+ --apcs=inter
+work --depend=.\objects\constants.d -o.\objects\constants.o -I.\RTE\_Target_1 -
+IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.1.1\CMSIS\Include -IC:\Keil_v5\ARM\PACK\Keil\K
+inetis_KLxx_DFP\1.13.0\Device\Include --predefine="__EVAL SETA 1" --predefine="
+__UVISION_VERSION SETA 524" --predefine="_RTE_ SETA 1" --predefine="MKL46Z256xx
+x4 SETA 1" --list=.\listings\constants.lst Constants.s
