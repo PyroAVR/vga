@@ -131,7 +131,7 @@
 /* VGA */
 //set TPMx to reset counter on TPM1 ovf
 #define TPM_CONF_TRG_TPM1 (0x09040000u)
-#define TPM_CONF_TRG_TPM0 (0x04040000u)
+#define TPM_CONF_TRG_TPM0 (0x09040000u)
 
 //Prescaler values for sync signals
 #define TPM_SC_PS_VSYNC  (0x4u)
@@ -158,7 +158,7 @@
                          (0 << TPM_SC_CPWMS_SHIFT) | (0 << TPM_SC_TOIE_SHIFT) | \
                         (01 << TPM_SC_CMOD_SHIFT) | (TPM_SC_PS_VSYNC))
 
-#define TPM_SC_HBLANK   ((0 << TPM_SC_DMA_SHIFT) | \
+#define TPM_SC_HBLANK_SYNC   ((0 << TPM_SC_DMA_SHIFT) | \
                         (0 << TPM_SC_CPWMS_SHIFT) | (1 << TPM_SC_TOIE_SHIFT) | \
                         (01 << TPM_SC_CMOD_SHIFT) | (TPM_SC_PS_HSYNC))
 
@@ -181,7 +181,7 @@
                         (0 << TPM_CnSC_ELSB_SHIFT) | TPM_CnSC_ELSA_MASK | \
                         (0 << TPM_CnSC_CHIE_SHIFT))
 
-#define TPM_CnSC_HBLANK ((0 << TPM_CnSC_DMA_SHIFT) | TPM_CnSC_MSB_MASK | \
+#define TPM_CnSC_HBLANK_SYNC ((0 << TPM_CnSC_DMA_SHIFT) | TPM_CnSC_MSB_MASK | \
                         (0 << TPM_CnSC_MSA_SHIFT) |\
                         (0 << TPM_CnSC_ELSB_SHIFT) | TPM_CnSC_ELSA_MASK | \
                         (1 << TPM_CnSC_CHIE_SHIFT))

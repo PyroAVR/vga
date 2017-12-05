@@ -23,6 +23,7 @@ MIXED_ASM_C SETL  {TRUE}
             export wait
 			export bp_poll
 			export fp_poll
+            export line_isr
 ;****************************************************************
 ;EQUates
 				
@@ -104,6 +105,12 @@ notbp		ldr		r1, [r0, #TPM_CNT_OFFSET]
 			cpsie	i
 			pop		{r0-r7, pc}
 			endp
+
+line_isr    proc{r0-r14}, {}
+            push {lr}
+            
+            pop  {pc}
+            endp
 
 
 
