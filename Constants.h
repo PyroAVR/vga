@@ -141,7 +141,7 @@
 #define TPM_MOD_PWM_PERIOD_HSYNC (1525u)
 
 //Duty time (# of CCR clocks) for sync signals
-#define TPM_CNT_PWM_PERIOD_VSYNC (954u)
+#define TPM_CNT_PWM_PERIOD_VSYNC (191u)
 #define TPM_CNT_PWM_PERIOD_HSYNC (183u)
 
 //Status & control (prescaling
@@ -149,11 +149,11 @@
 #define TPM_SC_PS_DIV16 (0x4u)
 
 #define TPM_SC_HSYNC    ((0 << TPM_SC_DMA_SHIFT) | \
-                        (0 << TPM_SC_CPWMS_SHIFT) | (TPM_SC_TOIE_MASK) | \
+                        (0 << TPM_SC_CPWMS_SHIFT) | (0 << TPM_SC_TOIE_SHIFT) | \
                         (01 << TPM_SC_CMOD_SHIFT) | (TPM_SC_PS_HSYNC))
 
 #define TPM_SC_VSYNC    ((0 << TPM_SC_DMA_SHIFT) | \
-                        (0 << TPM_SC_CPWMS_SHIFT) | (0 << TPM_SC_TOIE_SHIFT) | \
+                        (0 << TPM_SC_CPWMS_SHIFT) | (1 << TPM_SC_TOIE_SHIFT) | \
                         (01 << TPM_SC_CMOD_SHIFT) | (TPM_SC_PS_VSYNC))
 
 
@@ -182,5 +182,8 @@
 
 // Output configuration mask
 #define COLOR_PORTE_MASK 		(0x00FF0000)
+
+//PIT values
+#define PIT_LDVAL_HBLANK 1525 //familiar?
 
 #endif
