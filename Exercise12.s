@@ -27,8 +27,7 @@ MIXED_ASM_C SETL  {TRUE}
 ;EQUates
 				
 frontporch	equ		1481	; 1494 (1525 - 30) but polling is slow :(
-backporch	equ 	253		; 275
-
+backporch	equ 	253		; 275 (183+92) but polling sucks 
 ;****************************************************************
 ;MACROs
 ;****************************************************************
