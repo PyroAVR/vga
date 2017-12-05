@@ -106,9 +106,228 @@ notbp		ldr		r1, [r0, #TPM_CNT_OFFSET]
 			pop		{r0-r7, pc}
 			endp
 
-line_isr    proc{r0-r14}, {}
+line_isr    proc    {r0-r14}, {}
+;MIDDLE OF BLANKING
+;At the beginning of a sync pulse.
+;wait for exactly 183 clock cycles for the end of the pulse
+FPTE_BASE   equ     0xF80FF100
+PDOR_OFFSET equ     0x0
             push {lr}
-            
+            cpsid i
+            ldr  r0, =TPM0_BASE
+            ldr  r1, =0xFFFFFFFF
+            str  r1, [r0, #TPM_STATUS_OFFSET]
+            ldr  r0, =FPTE_BASE
+            mvns r2, r1
+            str  r2, [r0, #PDOR_OFFSET] ;no output
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+;END OF SYNC PULSE
+;Now, wait 92 clocks of back porch
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+;Hooray, we're in active video now! Set the bits high!
+            str r1, [r0, #PDOR_OFFSET] 
+;gtfo, screen should be on
+            cpsie i
             pop  {pc}
             endp
 

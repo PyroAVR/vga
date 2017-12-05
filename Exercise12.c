@@ -10,7 +10,7 @@
 int main (void) {
     __asm("CPSID   I");
     init_sync_signals();
-    init_tpm2_hblank();
+    //init_tpm2_hblank();
 	init_gpio();
     __asm("CPSIE   I");
     //init_pit_hblank();  //after CPSIE due to manual manipulation
@@ -28,17 +28,17 @@ loop:
 
 //#pragma interrupt_handler pit_isr //gcc
 
-void hblank_isr(void) __irq {
-    TPM2->STATUS = 0xFFFFFFFF; 
-    FPTE->PDOR = 0xFFFFFFFF;
-		__asm("cpsid i");
-    FPTE->PDOR = 0x00000000;
-		__asm("cpsie i");
-
-}
-
-void pit_isr(void)  __irq {
-    FPTE->PDOR = 0x00FF0000;
-    PIT->CHANNEL[0].TFLG = PIT_TFLG_TIF_MASK; 
-    FPTE->PDOR = 0x00000000;
-}
+// void hblank_isr(void) __irq {
+//     TPM2->STATUS = 0xFFFFFFFF; 
+//     FPTE->PDOR = 0xFFFFFFFF;
+// 		__asm("cpsid i");
+//     FPTE->PDOR = 0x00000000;
+// 		__asm("cpsie i");
+// 
+// }
+// 
+// void pit_isr(void)  __irq {
+//     FPTE->PDOR = 0x00FF0000;
+//     PIT->CHANNEL[0].TFLG = PIT_TFLG_TIF_MASK; 
+//     FPTE->PDOR = 0x00000000;
+// }

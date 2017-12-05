@@ -35,6 +35,11 @@ void init_sync_signals()    {
     TPM0->CNT               = TPM_CNT_INIT;
     TPM0->MOD               = TPM_MOD_PWM_PERIOD_HSYNC;
 
+    //Configure NVIC
+    NVIC->ICPR[0]          |= (0 << 17);   //clear pending IRQ
+    NVIC->IP[5]            |= (3 << 17);   //see TRM
+    NVIC->ISER[0]          |= (1 << 17);    //enable this IRQ 
+
     TPM0->CONTROLS[4].CnSC  = TPM_CnSC_HBLANK_SYNC;
     TPM0->CONTROLS[4].CnV   = TPM_CNT_PWM_PERIOD_HSYNC;
     TPM0->SC                = TPM_SC_HBLANK_SYNC;
