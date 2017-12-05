@@ -7,7 +7,14 @@
  * Prequisites: CMSIS startup completed, 48MHz Core clock.
  */
 
+
+//global vars
+color screen_color;
+
+extern uint16_t line_ctr;
+
 int main (void) {
+    line_ctr = 0;	
     __asm("CPSID   I");
     init_sync_signals();
     //init_tpm2_hblank();
@@ -17,7 +24,9 @@ int main (void) {
 		//16 to 23
 		FPTE->PDOR = 0x00400000;
 
-	
+    screen_color.r = 7;
+    screen_color.g = 7;
+    screen_color.b = 3;
     
 loop:
 		//bp_poll();

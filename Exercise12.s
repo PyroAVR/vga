@@ -24,6 +24,8 @@ MIXED_ASM_C SETL  {TRUE}
 			export bp_poll
 			export fp_poll
             export line_isr
+            export line_ctr
+            import screen_color
 ;****************************************************************
 ;EQUates
 				
@@ -114,122 +116,106 @@ FPTE_BASE   equ     0xF80FF100
 PDOR_OFFSET equ     0x0
             push {lr}
             cpsid i
+            ldr  r0, =line_ctr
+            ldrh r1, [r0, #0]
+            cmp  r1, #60
+            beq  line_draw
+            adds r1, r1, #1
+            strh r1, [r0, #0]
+            pop {pc}
+line_draw
+            movs r1, #0
+            strh r1, [r0, #0]
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
             ldr  r0, =TPM0_BASE
-            ldr  r1, =0xFFFFFFFF
+            ldr  r1, =screen_color
+            ldr  r1, [r1, #0]
             str  r1, [r0, #TPM_STATUS_OFFSET]
             ldr  r0, =FPTE_BASE
             mvns r2, r1
             str  r2, [r0, #PDOR_OFFSET] ;no output
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
 ;END OF SYNC PULSE
 ;Now, wait 92 clocks of back porch
             nop
@@ -327,7 +313,7 @@ PDOR_OFFSET equ     0x0
 ;Hooray, we're in active video now! Set the bits high!
             str r1, [r0, #PDOR_OFFSET] 
 ;gtfo, screen should be on
-            cpsie i
+           cpsie i
             pop  {pc}
             endp
 
@@ -409,5 +395,6 @@ PDOR_OFFSET equ     0x0
 ;Variables
             AREA    MyData,DATA,READWRITE
 ;>>>>> begin variables here <<<<<
+line_ctr    space 2
 ;>>>>>   end variables here <<<<<
             END
