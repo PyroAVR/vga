@@ -20,7 +20,7 @@ int main (void) {
     
 loop:
 		//bp_poll();
-		fp_poll();
+		//fp_poll();
     goto loop;
 }
 
