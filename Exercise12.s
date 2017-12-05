@@ -25,16 +25,10 @@ MIXED_ASM_C SETL  {TRUE}
 			export fp_poll
 ;****************************************************************
 ;EQUates
-TPM_CnV_PWM_DUTY_2ms    equ 6000
-TPM_CnV_PWM_DUTY_1ms    equ 2200
-pwm_2ms     equ     TPM_CnV_PWM_DUTY_2ms
-pwm_1ms     equ     TPM_CnV_PWM_DUTY_1ms
-dac0_steps  equ     4096    ;guessing!
-servo_positions\
-            equ     5
 				
 frontporch	equ		1481	; 1494 (1525 - 30) but polling is slow :(
 backporch	equ 	253		; 275
+
 ;****************************************************************
 ;MACROs
 ;****************************************************************
@@ -117,6 +111,73 @@ notbp		ldr		r1, [r0, #TPM_CNT_OFFSET]
 			cpsie	i
 			pop		{r0-r3, pc}
 			endp
+
+
+; init_pit        proc    {r0-r14}, {}
+; ; Initialize PIT for 0.01 s interrupt
+; ; inputs             : none
+; ; outputs            : none
+; ; modified registers : none
+;             ;why is the pit so weird
+;             push {r0-r3, lr}
+;             ; clock PIT
+;             ldr  r0, =SIM_SCGC6
+;             ldr  r1, =SIM_SCGC6_PIT_MASK
+;             ldr  r2, [r0, #0]           ;current scgc
+;             orrs r2, r2, r1
+;             str  r2, [r0, #0]           ;read-modify-write
+;             ;Disable PIT timer 0??
+;             
+;             ; Set priority
+;             ldr  r0, =PIT_IPR
+;             movs r1, #3					;couldn't find the NVIC_IPR_PIT_MASK def.
+; 			lsls r1, r1, #22			;using formula from sub-family ref.
+;             ldr  r2, [r0, #0]           
+;             bics r2, r2, r1				;0 -> highest priority
+;             str  r2, [r0, #0]
+;             ;PIT Module Control Register setup
+;             ldr  r0, =PIT_BASE
+;             ldr  r1, =PIT_MCR_EN_FRZ
+;             str  r1, [r0, #PIT_MCR_OFFSET]
+;             ;PIT load value
+;             ldr  r0, =PIT_CH0_BASE
+; ;            ldr  r1, =PIT_LDVAL_HBLANK
+;             str  r1, [r0, #PIT_LDVAL_OFFSET]
+;             ;PIT ch0 send interrupts
+;             movs r1, #PIT_TCTRL_CH_IE
+;             str  r1, [r0, #PIT_TCTRL_OFFSET]
+;             ; NVIC setup
+;             ldr  r0, =NVIC_ISER
+;             ldr  r1, =PIT_IRQ_MASK
+;             str  r1, [r0, #0]           ;unmask irq for pit
+;             ; Clear PIT Channel 0 interrupt
+;             ldr  r0, =PIT_CH0_BASE
+;             ldr  r1, =PIT_TFLG_TIF_MASK
+;             str  r1, [r0, #PIT_TFLG_OFFSET]
+; 
+;             pop  {r0-r3, pc}
+;             endp
+
+
+; pit_isr     proc   {r0-r14} 
+;             cpsid i
+; 			ldr r0, =RunStopWatch
+;             cmp r0, #0
+;             beq pit_done
+;             ldr r0, =time_counter
+;             ldr r1, [r0, #0]
+;             adds r1, r1, #1
+;             str r1, [r0, #0]
+; 
+; pit_done    ldr r0, =NVIC_ISER
+; 			;clear interrupts or something
+; 			ldr  r0, =PIT_CH0_BASE
+;             ldr  r1, =PIT_TFLG_TIF_MASK
+;             str  r1, [r0, #PIT_TFLG_OFFSET]
+; 			;return
+; 			cpsie i
+;             bx  lr
+; 			endp
 ;>>>>>   end subroutine code <<<<<
             ALIGN
 ;**********************************************************************
