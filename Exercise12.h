@@ -5,4 +5,5 @@ void fp_poll(void);
 void bp_poll(void);
 
 void pit_isr(void) __irq ;
+void hblank_isr(void) __irq ;
 #endif

@@ -27,7 +27,8 @@ MIXED_ASM_C SETL  {TRUE}
 ;EQUates
 				
 frontporch	equ		1481	; 1494 (1525 - 30) but polling is slow :(
-backporch	equ 	253		; 275 (183+92) but polling sucks 
+backporch	equ 	253		; 275
+
 ;****************************************************************
 ;MACROs
 ;****************************************************************
@@ -58,7 +59,7 @@ waitdone    pop  {r0, pc}
 fp_poll		proc 	{r0-r14}, {}
 			cpsid	i
 			push 	{r0-r3, lr}
-			movs	r2, #0xFF
+            movs	r2, #0xFF
 			lsls	r2, r2, #16
 			
 			ldr		r0, =TPM0_BASE
@@ -76,6 +77,7 @@ notfp		ldr		r1, [r0, #TPM_CNT_OFFSET]
 			bics	r1, r1, r2
 			str		r1, [r0, #0]
 			cpsie	i
+
 			pop		{r0-r3, pc}
 			endp
 				
@@ -85,9 +87,9 @@ notfp		ldr		r1, [r0, #TPM_CNT_OFFSET]
 ;============================================================
 bp_poll		proc 	{r0-r14}, {}
 			cpsid	i
-			push 	{r0-r3, lr}
-			movs	r2, #0xFF
-			lsls	r2, r2, #16
+			push 	{r0-r7, lr}
+			ldr     r7, =PIT_CH0_BASE
+            ldr     r6, =(PIT_TCTRL_TEN_MASK :OR: PIT_TCTRL_TIE_MASK)
 			
 			ldr		r0, =TPM0_BASE
 notbp		ldr		r1, [r0, #TPM_CNT_OFFSET]
@@ -98,18 +100,11 @@ notbp		ldr		r1, [r0, #TPM_CNT_OFFSET]
 			cmp 	r1, r3
 			bhi		notbp
 			
-			ldr		r0, =FGPIOE_PDOR
-			ldr		r1, [r0, #0]
-			orrs	r1, r1, r2
-			str		r1, [r0, #0]
-			
-			bl		wait
-			
-			bics	r1, r1, r2
-			str		r1, [r0, #0]
+            str     r6, [r7, #PIT_TCTRL_OFFSET]
 			cpsie	i
-			pop		{r0-r3, pc}
+			pop		{r0-r7, pc}
 			endp
+
 
 
 ; init_pit        proc    {r0-r14}, {}

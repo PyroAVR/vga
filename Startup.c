@@ -51,6 +51,31 @@ void init_sync_signals()    {
 
 }
 
+
+void init_tpm2_hblank() {
+    //Clock TPM2
+    SIM->SCGC6              |= SIM_SCGC6_TPM2_MASK;
+
+    //Select 48MHz clock for TPM
+    SIM->SOPT2             &= ~SIM_SOPT2_TPMSRC_MASK;
+    SIM->SOPT2             |= SIM_SOPT2_TPM_MCGPLLCLK_DIV2;
+
+    //Configure TPM2_CH0
+    TPM2->CONF              = TPM_CONF_TRG_TPM0;
+    TPM2->CNT               = TPM_CNT_INIT;
+    TPM2->MOD               = TPM_MOD_PWM_PERIOD_HSYNC;
+
+    //Configure NVIC
+    NVIC->ICPR[0]          |= (0 << 19);   //clear pending IRQ
+    NVIC->IP[5]            |= (3 << 19);   //see TRM
+    NVIC->ISER[0]          |= (1 << 19);    //enable this IRQ 
+
+    TPM2->CONTROLS[0].CnSC  = TPM_CnSC_HBLANK;
+    TPM2->CONTROLS[0].CnV   = TPM_CNT_PWM_PERIOD_HBLANK;
+    TPM2->SC                = TPM_SC_HBLANK;
+
+}
+
 void init_pit_hblank()  {
     __asm("cpsid    i");
     SIM->SCGC6             |= SIM_SCGC6_PIT_MASK;
