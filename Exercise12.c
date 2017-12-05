@@ -14,13 +14,13 @@ int main (void) {
 		
     __asm("CPSIE   I");
 		//16 to 23
-		//FPTE->PDOR = 0x00450000;
+		FPTE->PDOR = 0x00400000;
 
 	
     
 loop:
 		//bp_poll();
-		fp_poll();
+		//fp_poll();
     goto loop;
 }
 

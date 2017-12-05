@@ -7,6 +7,7 @@
 //void init_dac0(void);
 void init_sync_signals(void);
 void init_gpio(void);
+void init_pit_hblank(void);
 #endif
 
 

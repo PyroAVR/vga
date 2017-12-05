@@ -51,6 +51,12 @@ void init_sync_signals()    {
 
 }
 
+void init_pit_hblank()  {
+    SIM->SCGC6             |= SIM_SCGC6_PIT_MASK;
+    PIT->MCR                = PIT_MCR_MDIS_MASK | PIT_MCR_FRZ_MASK;
+    PIT->CHANNEL[0].LDVAL   = PIT_LDVAL_HBLANK;
+}
+
 /**
 *	Initialize gpio ports for color output
 */
