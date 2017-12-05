@@ -153,7 +153,7 @@
                         (01 << TPM_SC_CMOD_SHIFT) | (TPM_SC_PS_HSYNC))
 
 #define TPM_SC_VSYNC    ((0 << TPM_SC_DMA_SHIFT) | \
-                        (0 << TPM_SC_CPWMS_SHIFT) | (1 << TPM_SC_TOIE_SHIFT) | \
+                         (0 << TPM_SC_CPWMS_SHIFT) | (0 << TPM_SC_TOIE_SHIFT) | \
                         (01 << TPM_SC_CMOD_SHIFT) | (TPM_SC_PS_VSYNC))
 
 
@@ -170,7 +170,7 @@
 #define TPM_CnSC_VSYNC ((0 << TPM_CnSC_DMA_SHIFT) | TPM_CnSC_MSB_MASK | \
                         (0 << TPM_CnSC_MSA_SHIFT) |  \
                         (0 << TPM_CnSC_ELSB_SHIFT) | TPM_CnSC_ELSA_MASK | \
-                        TPM_CnSC_CHIE_MASK)
+                        (0 << TPM_CnSC_CHIE_SHIFT))
 #define TPM_CnSC_HSYNC ((0 << TPM_CnSC_DMA_SHIFT) | TPM_CnSC_MSB_MASK | \
                         (0 << TPM_CnSC_MSA_SHIFT) |\
                         (0 << TPM_CnSC_ELSB_SHIFT) | TPM_CnSC_ELSA_MASK | \
@@ -184,6 +184,7 @@
 #define COLOR_PORTE_MASK 		(0x00FF0000)
 
 //PIT values
-#define PIT_LDVAL_HBLANK 1525 //familiar?
+//PIT get BUS CLOCK @ 24 MHz
+#define PIT_LDVAL_HBLANK 763
 
 #endif

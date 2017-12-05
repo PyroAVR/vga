@@ -3,4 +3,6 @@
 void wait(void);
 void fp_poll(void);
 void bp_poll(void);
+
+void pit_isr(void) __irq ;
 #endif

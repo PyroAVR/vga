@@ -47,12 +47,27 @@ void init_sync_signals()    {
     TPM1->CONTROLS[1].CnSC  = TPM_CnSC_VSYNC; 
     TPM1->CONTROLS[1].CnV   = TPM_CNT_PWM_PERIOD_VSYNC;
     TPM1->SC                = TPM_SC_VSYNC;
+
+
 }
 
 void init_pit_hblank()  {
+    __asm("cpsid    i");
     SIM->SCGC6             |= SIM_SCGC6_PIT_MASK;
+    
     PIT->MCR                = PIT_MCR_MDIS_MASK | PIT_MCR_FRZ_MASK;
+
+    NVIC->ICPR[0]          |= (0 << 22);   //clear pending IRQ
+    NVIC->IP[5]            |= (3 << 22);   //see TRM
+    NVIC->ISER[0]          |= (1 << 22);    //enable this IRQ 
+    
     PIT->CHANNEL[0].LDVAL   = PIT_LDVAL_HBLANK;
+    PIT->CHANNEL[0].TCTRL  |= PIT_TCTRL_TIE_MASK | (0 << PIT_TCTRL_TEN_SHIFT); //disable pit
+    PIT->CHANNEL[0].TFLG   |= PIT_TFLG_TIF_MASK; //w1c
+    PIT->MCR                = PIT_MCR_FRZ_MASK;
+    __asm("cpsie    i");
+    bp_poll();
+
 }
 
 /**
@@ -78,6 +93,5 @@ void init_gpio(){
 		// Initialize outputs to zero
 		FPTE->PDOR = 0;
 }
-
 
 
